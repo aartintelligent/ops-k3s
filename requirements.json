@@ -1,0 +1,16 @@
+{
+  "machines": [
+    {
+      "name": "k3s-server",
+      "box": "debian/bookworm64",
+      "memory": "32768",
+      "cpus": "8",
+      "private_ips": [
+        "10.100.0.10"
+      ],
+      "provision_scripts": [
+        "script/provision-base.sh"
+      ]
+    }
+  ]
+}
