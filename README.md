@@ -12,5 +12,9 @@ vagrant ssh
 ```
 
 ```shell
+vagrant halt
+```
+
+```shell
 vagrant destroy -f
 ```
