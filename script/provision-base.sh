@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+USERS=(vagrant debian ubuntu rootless)
+
 sudo install -m 0755 -d /etc/apt/keyring
 
 sudo apt-get update && \
@@ -23,8 +25,6 @@ sudo apt-get update
 
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-USERS=(vagrant rootless)
-
 for USER in "${USERS[@]}"; do
 
   if id "$USER" &>/dev/null; then
@@ -38,8 +38,6 @@ done
 sudo systemctl reload docker
 
 curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode=644
-
-USERS=(vagrant rootless)
 
 for USER in "${USERS[@]}"; do
 
