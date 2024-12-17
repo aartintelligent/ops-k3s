@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-USERS=(vagrant debian ubuntu rootless)
+USERS=(vagrant debian root rootless)
 
 sudo install -m 0755 -d /etc/apt/keyring
 
@@ -11,7 +11,9 @@ sudo apt-get install -y \
   ca-certificates \
   curl
 
-sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyring/docker.asc
+sudo curl \
+  -fsSL https://download.docker.com/linux/debian/gpg \
+  -o /etc/apt/keyring/docker.asc
 
 sudo chmod a+r /etc/apt/keyring/docker.asc
 
@@ -23,38 +25,30 @@ $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
 
 sudo apt-get update
 
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+sudo apt-get install -y containerd.io
 
-for USER in "${USERS[@]}"; do
+sudo curl -sfL https://get.k3s.io | sh -s - "$@"
 
-  if id "$USER" &>/dev/null; then
+if [ -f /etc/rancher/k3s/k3s.yaml ]; then
 
-    sudo usermod -aG docker ${USER}
+  for USER in "${USERS[@]}"; do
 
-  fi
+    if id "$USER" &>/dev/null; then
 
-done
+      sudo mkdir -p /home/${USER}/.kube
 
-sudo systemctl reload docker
+      sudo cp /etc/rancher/k3s/k3s.yaml /home/${USER}/.kube/config
 
-curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode=644
+      sudo chmod 644 /home/${USER}/.kube/config
 
-for USER in "${USERS[@]}"; do
+      sudo chown ${USER}:${USER} /home/${USER}/.kube/config
 
-  if id "$USER" &>/dev/null; then
+      sudo chmod o-r /home/${USER}/.kube/config
 
-    sudo mkdir -p /home/${USER}/.kube
+      sudo chmod g-r /home/${USER}/.kube/config
 
-    sudo cp /etc/rancher/k3s/k3s.yaml /home/${USER}/.kube/config
+    fi
 
-    sudo chmod 644 /home/${USER}/.kube/config
+  done
 
-    sudo chown ${USER}:${USER} /home/${USER}/.kube/config
-
-    sudo chmod o-r /home/${USER}/.kube/config
-
-    sudo chmod g-r /home/${USER}/.kube/config
-
-  fi
-
-done
+fi
