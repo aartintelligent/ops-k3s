@@ -27,6 +27,8 @@ sudo apt-get update
 
 sudo apt-get install -y containerd.io
 
+sudo export K3S_KUBECONFIG_MODE=644
+
 sudo curl -sfL https://get.k3s.io | sh -s - "$@"
 
 if [ -f /etc/rancher/k3s/k3s.yaml ]; then
