@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-USERS=(vagrant debian root rootless)
+USERS=($(. /etc/os-release && echo "$ID") root rootless vagrant)
 
 sudo install -m 0755 -d /etc/apt/keyring
 
@@ -12,14 +12,14 @@ sudo apt-get install -y \
   curl
 
 sudo curl \
-  -fsSL https://download.docker.com/linux/debian/gpg \
+  -fsSL https://download.docker.com/linux/$(. /etc/os-release && echo "$ID")/gpg \
   -o /etc/apt/keyring/docker.asc
 
 sudo chmod a+r /etc/apt/keyring/docker.asc
 
 echo \
 "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyring/docker.asc] \
-https://download.docker.com/linux/debian \
+https://download.docker.com/linux/$(. /etc/os-release && echo "$ID") \
 $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
 | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
