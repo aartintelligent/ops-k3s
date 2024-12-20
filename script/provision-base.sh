@@ -25,7 +25,22 @@ $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
 
 sudo apt-get update
 
-sudo apt-get install -y containerd.io
+sudo apt-get install -y \
+  docker-ce \
+  docker-ce-cli \
+  containerd.io
+
+for USER in "${USERS[@]}"; do
+
+  if id "$USER" &>/dev/null; then
+
+    sudo usermod -aG docker ${USER}
+
+  fi
+
+done
+
+sudo systemctl reload docker
 
 export K3S_KUBECONFIG_MODE=644
 
