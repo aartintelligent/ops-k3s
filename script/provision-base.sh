@@ -3,6 +3,14 @@ set -e
 
 USERS=($(. /etc/os-release && echo "$ID") root rootless vagrant)
 
+sudo swapoff -a
+
+sudo sed -i '/swap/d' /etc/fstab
+
+sudo sysctl -w net.ipv4.ip_forward=1
+
+echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
+
 sudo install -m 0755 -d /etc/apt/keyring
 
 sudo apt-get update && \
@@ -56,11 +64,7 @@ if [ -f /etc/rancher/k3s/k3s.yaml ]; then
 
       sudo cp /etc/rancher/k3s/k3s.yaml /home/${USER}/.kube/config
 
-      sudo chmod 644 /home/${USER}/.kube/config
-
       sudo chown ${USER}:${USER} /home/${USER}/.kube/config
-
-      sudo chmod o-r /home/${USER}/.kube/config
 
       sudo chmod g-r /home/${USER}/.kube/config
 
