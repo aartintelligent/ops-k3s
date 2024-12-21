@@ -50,6 +50,11 @@ done
 
 sudo systemctl reload docker
 
+sudo apt-get install -y \
+  open-iscsi \
+  nfs-kernel-server \
+  nfs-common
+
 export K3S_KUBECONFIG_MODE=644
 
 sudo curl -sfL https://get.k3s.io | sh -s - "$@"
