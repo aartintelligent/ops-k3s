@@ -51,7 +51,6 @@ done
 sudo systemctl reload docker
 
 sudo apt-get install -y \
-  open-iscsi \
   nfs-kernel-server \
   nfs-common
 
