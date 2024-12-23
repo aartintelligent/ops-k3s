@@ -34,23 +34,7 @@ $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
 sudo apt-get update
 
 sudo apt-get install -y \
-  docker-ce \
-  docker-ce-cli \
-  containerd.io
-
-for USER in "${USERS[@]}"; do
-
-  if id "$USER" &>/dev/null; then
-
-    sudo usermod -aG docker ${USER}
-
-  fi
-
-done
-
-sudo systemctl reload docker
-
-sudo apt-get install -y \
+  containerd.io \
   nfs-kernel-server \
   nfs-common
 
