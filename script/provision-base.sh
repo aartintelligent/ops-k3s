@@ -33,15 +33,7 @@ $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
 
 sudo apt-get update
 
-sudo apt-get install -y \
-  containerd.io \
-  ceph-fuse \
-  ceph-common \
-  open-iscsi \
-  nfs-kernel-server \
-  nfs-common
-
-sudo modprobe ceph && echo "ceph" | sudo tee -a /etc/modules
+sudo apt-get install -y containerd.io
 
 export K3S_KUBECONFIG_MODE=644
 
