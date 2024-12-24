@@ -41,7 +41,7 @@ sudo apt-get install -y \
   nfs-kernel-server \
   nfs-common
 
-sudo modprobe ceph && echo ceph | sudo tee -a /etc/modules
+sudo modprobe ceph && echo "ceph" | sudo tee -a /etc/modules
 
 export K3S_KUBECONFIG_MODE=644
 
