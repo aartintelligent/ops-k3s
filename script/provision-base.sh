@@ -33,7 +33,11 @@ $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
 
 sudo apt-get update
 
-sudo apt-get install -y containerd.io
+sudo apt-get install -y \
+  containerd.io \
+  ceph-fuse \
+  ceph-common \
+  nfs-common
 
 export K3S_KUBECONFIG_MODE=644
 
